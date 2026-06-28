@@ -1,6 +1,4 @@
-import RestaurantCard from "./RestaurantCard/RestaurantCard";
-
-const restData = {
+export let restData = {
     "restaurants": [
         {
             "info": {
@@ -227,25 +225,5 @@ const restData = {
         },
     ]
 }
-
-const RestaurantContainer = () => {
-    return (
-        <div className="flex flex-wrap justify-center gap-10">
-            {restData.restaurants.map((restaurant) => (
-                <RestaurantCard
-                    key={restaurant.info.id}
-                    resName={restaurant.info.name}
-                    cuisine={restaurant.info.cuisines.join(", ")}
-                    rating={restaurant.info.avgRating}
-                    time={restaurant.info.sla.deliveryTime}
-                    labelHeader={restaurant.info.aggregatedDiscountInfoV3?.header}
-                    labelSubHeader={restaurant.info.aggregatedDiscountInfoV3?.subHeader}
-                    discountTagHeader={restaurant.info.aggregatedDiscountInfoV3?.discountTag}
-                    image={"https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/" + restaurant.info.cloudinaryImageId}
-                />
-            ))}
-        </div>
-
-    )
-};
-export default RestaurantContainer;
+export const quickMealsLogo = "https://media.istockphoto.com/id/1435983029/vector/food-delivery-logo-images.jpg?s=612x612&w=0&k=20&c=HXPxcjOxUiW4pMW1u9E0k2dJYQOU37a_0qZAy3so8fY=";
+export const resCardImageUrl = "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/";
