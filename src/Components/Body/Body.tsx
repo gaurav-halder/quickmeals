@@ -6,23 +6,38 @@ import RestaurantSkeletonContainer from "./LoadingSkeletonContainer/RestaurantSk
 import FilterSkeletonButton from "./LoadingSkeletonContainer/FilterSkeletonButton";
 import { restData, restaurant_Api_Url } from '../Utils/Constants';
 
-const Body = () => {
+interface BodyProps {
+    searchText: string;
+}
+
+const Body = ({ searchText }: BodyProps) => {
+    const [filteredRestaurants, setFilteredRestaurants] = useState<any[]>([]);
     const [listOfRestaurants, setListOfRestaurants] = useState<any[]>([]);
+    const [restaurantsFilterHeaderText, setRestaurantsFilterHeaderText] = useState("");
 
     useEffect(() => {
         fetchData();
     }, [])
 
+    useEffect(() => {
+        const filtered = listOfRestaurants.filter(rest =>
+            rest.info.name.toLowerCase().includes(searchText.toLowerCase())
+        );
+        setFilteredRestaurants(filtered);
+    }, [searchText, listOfRestaurants])
+
     const fetchData = async () => {
         const data = await fetch(restaurant_Api_Url);
         const json = await data.json();
         const listOfRestaurants = json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants;
-        setListOfRestaurants(listOfRestaurants);
+        const headerText = json?.data?.cards[2]?.card?.card?.title;
+        setFilteredRestaurants(listOfRestaurants || []);
+        setListOfRestaurants(listOfRestaurants || []);
+        setRestaurantsFilterHeaderText(headerText);
     }
 
     return (
         <div className="body">
-            <Search />
             {listOfRestaurants.length === 0 ? (
                 <>
                     <FilterSkeletonButton />
@@ -30,8 +45,8 @@ const Body = () => {
                 </>
             ) : (
                 <>
-                    <FilterButton setListOfRestaurants={setListOfRestaurants} />
-                    <RestaurantContainer listOfRestaurants={listOfRestaurants} />
+                    <FilterButton setListOfRestaurants={setListOfRestaurants} restaurantsFilterHeaderText={restaurantsFilterHeaderText} />
+                    <RestaurantContainer listOfRestaurants={filteredRestaurants} />
                 </>
             )}
         </div>
